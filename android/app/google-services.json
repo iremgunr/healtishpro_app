@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "371742962556",
+    "project_id": "healtish-e8a4c",
+    "storage_bucket": "healtish-e8a4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371742962556:android:0092ab2f56bd88fd6e6af9",
+        "android_client_info": {
+          "package_name": "com.example.healtish_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "371742962556-hs56ea03fhcv1eptqvsbgnmt60l6l15c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqbDhpnDkdhfwc7Fd-W11c8DfzXNCSziw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "371742962556-hs56ea03fhcv1eptqvsbgnmt60l6l15c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
