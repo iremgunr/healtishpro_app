@@ -2,12 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:healtish_app/model/user.dart';
 import 'package:healtish_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:healtish_app/authenticate/wrapper.dart';
 
 
-class AuthService {
+class AuthService{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final Wrapper _wrapper = Wrapper();
   // create user obj based on firebase user
   UserComponent _userFromFirebaseUser(User user) {
     return user != null ? UserComponent(uid: user.uid) : null;
@@ -17,6 +18,10 @@ class AuthService {
   Stream<UserComponent> get user {
     return FirebaseAuth.instance.authStateChanges()
        .map(_userFromFirebaseUser);
+  }
+
+  String getCurrentUser(){
+    return _auth.currentUser.email;
   }
 
   // sign in anon
@@ -36,7 +41,7 @@ class AuthService {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       User user = result.user;
-      return user;
+      return result;
     } catch (error) {
       print(error.toString());
       return null;
@@ -44,12 +49,12 @@ class AuthService {
   }
 
   // register with email and password
-  Future registerWithEmailAndPassword(String email, String password, String name, String surname, String age, String gender, String weight, String height) async {
+  Future registerWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User user = result.user;
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).updateUserData(email,password,name,surname,age,gender,weight,height);
+      await DatabaseService(uid: user.uid).updateUserData(email,true);
       return _userFromFirebaseUser(user);
     } catch (error) {
       print(error.toString());

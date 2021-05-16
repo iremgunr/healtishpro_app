@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "371742962556",
+    "firebase_url": "https://healtish-e8a4c-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "healtish-e8a4c",
     "storage_bucket": "healtish-e8a4c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:371742962556:android:0092ab2f56bd88fd6e6af9",
+        "mobilesdk_app_id": "1:371742962556:android:fe77b9b6e39ef1306e6af9",
         "android_client_info": {
           "package_name": "com.example.healtish_app"
         }

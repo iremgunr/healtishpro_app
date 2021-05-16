@@ -1,5 +1,9 @@
 import 'package:healtish_app/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healtish_app/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
 
 class DatabaseService {
 
@@ -8,20 +12,52 @@ class DatabaseService {
 
   // collection reference
   final CollectionReference users = FirebaseFirestore.instance.collection('users');
+  final CollectionReference calories = FirebaseFirestore.instance.collection('calories');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // var document = FirebaseFirestore.instance.collection('calories');
+  
+  Future<void> addUserCalorieInfo(int age,int weight,int height,bool gender,String email, int calorie) async {
+      return calories.add({
+        'age':age,
+        'weight':weight,
+        'height':height,
+        'gender':gender,
+        'email':email,
+        'calorie':calorie
+      })
+      .then((value)=> print("User Calorie Information Added"))
+      .catchError((error)=> print("Failed to add Calorie Info : $error"));
+  }
 
-  Future<void> updateUserData(String email, String password, String name, String surname, String age, String gender, String weight, String height) async {
+  Future<String> checkhUserCalorieDataExits(String email)async{
+
+  // calories.snapshots().listen((data){
+  //     data.docs.forEach((doc){
+  //       if(email==doc['email']){
+  //         return true;
+  //       }});
+  //       return false;
+  //    });
+  //   print("checkhUserCalorieDataExits-$result");
+  //   return result.toString();
+  }
+
+  Future<void> updateUserData(String email, bool isNew) async {
     return  users.add({
             'email': email,
-            'password': password,
-            'name': name,
-            'surname': surname,
-            'age': age,
-            'gender': gender,
-            'weight': weight,
-            'height': height
+            'isNew':isNew,
           })
           .then((value) => print("User Added"))
           .catchError((error) => print("Failed to add user: $error"));
+
+  }
+   Future<void> updateUserIsNewData(String email,bool isNew) async {
+    return users.doc(_auth.currentUser.uid).update({
+            'email': email,
+            'isNew':isNew,
+          })
+          .then((value) => print("User Added"))
+          .catchError((error) => print("Failed to update user: $error"));
 
   }
 
@@ -45,12 +81,7 @@ class DatabaseService {
       uid: uid,
       email: data["email"],
       password: data["password"],
-      name: data["name"],
-      surname: data["surname"],
-      age: data["age"],
-      gender: data["gender"],
-      weight: data["weight"],
-      height: data["height"]
+
     );
   }
 

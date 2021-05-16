@@ -2,6 +2,8 @@ import 'package:healtish_app/services/auth.dart';
 import 'package:healtish_app/shared/constants.dart';
 import 'package:healtish_app/shared/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:healtish_app/ui/pages/calorie_calculator_screen.dart';
+import 'package:healtish_app/ui/pages/profile_screen.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -26,15 +28,15 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.indigo[50],
+      backgroundColor: Color(0xFFE9E9E9),
       appBar: AppBar(
-        backgroundColor: Colors.indigo[50],
+        backgroundColor: Color(0xFFE0AD61),
         elevation: 0.0,
-        title: Text('Sign in',style: TextStyle(color:const Color(0xFF200087)),),
+        title: Text('Sign in',style: TextStyle(color:Color(0XFF200087),fontSize: 20),),
         actions: <Widget>[
           FlatButton.icon(
-            icon: Icon(Icons.person),
-            label: Text('Register', style: TextStyle(color: const Color(0xFF200087))),
+            icon: Icon(Icons.person,color:Color(0XFF200087) ,),
+            label: Text('Register', style: TextStyle(color: Color(0XFF200087),fontSize:20)),
             onPressed: () => widget.toggleView(),
           ),
         ],
@@ -44,52 +46,66 @@ class _SignInState extends State<SignIn> {
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Divider(color: const Color(0XFF200087)),
-              SizedBox(height: 20.0),
-              TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'email'),
-                validator: (val) => val.isEmpty ? 'Enter an email' : null,
-                onChanged: (val) {
-                  setState(() => email = val);
-                },
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                obscureText: true,
-                decoration: textInputDecoration.copyWith(hintText: 'password'),
-                validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
-                onChanged: (val) {
-                  setState(() => password = val);
-                },
-              ),
-              SizedBox(height: 20.0),
-              RaisedButton(
-                color: const Color(0xFF200087),
-                child: Text(
-                  'Sign In',
-                  style: TextStyle(color: Colors.white),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Hero(tag: 'logo',
+                  child: Container(
+                    child: Image.asset('assets/logo.png'),
+                  ),
                 ),
-                onPressed: () async {
-                  if(_formKey.currentState.validate()){
-                    setState(() => loading = true);
-                    dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-                    if(result == null) {
-                      setState(() {
-                        loading = false;
-                        error = 'Could not sign in with those credentials';
-                      });
+                Divider(color: const Color(0xFFE3B3D2)),
+                SizedBox(height: 20.0),
+                TextFormField(
+                  decoration: textInputDecoration.copyWith(hintText: 'Please Enter Email'),
+                  validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                  onChanged: (val) {
+                    setState(() => email = val);
+                  },
+                ),
+                SizedBox(height: 20.0),
+                TextFormField(
+                  obscureText: true,
+                  decoration: textInputDecoration.copyWith(hintText: 'Please Enter Password'),
+                  validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
+                  onChanged: (val) {
+                    setState(() => password = val);
+                  },
+                ),
+                SizedBox(height: 20.0),
+                RaisedButton(
+
+                  color: const Color(0XFF200087),
+                  child: Text(
+                    '  Sign In  ',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () async {
+
+                    if(_formKey.currentState.validate()){
+                      setState(() => loading = true );
+                      dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                      if(result == null) {
+                        setState(() {
+                          loading = false;
+                          error = 'Could not sign in with those credentials';
+                        });
+                      }else{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfileScreen( calorie: 1500.0,)),);
                     }
+                    }
+
                   }
-                }
-              ),
-              SizedBox(height: 12.0),
-              Text(
-                error,
-                style: TextStyle(color: Colors.red, fontSize: 14.0),
-              ),
-            ],
+                ),
+                SizedBox(height: 12.0),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.red, fontSize: 14.0),
+                ),
+              ],
+            ),
           ),
         ),
       ),

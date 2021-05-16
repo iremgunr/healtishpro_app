@@ -2,6 +2,8 @@ import 'package:healtish_app/services/auth.dart';
 import 'package:healtish_app/shared/constants.dart';
 import 'package:healtish_app/shared/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:healtish_app/ui/pages/calorie_calculator_screen.dart';
+
 
 class Register extends StatefulWidget {
 
@@ -22,25 +24,20 @@ class _RegisterState extends State<Register> {
   // text field state
   String email = '';
   String password = '';
-  String name='';
-  String surname='';
-  String age='';
-  String gender='';
-  String weight='';
-  String height='';
+
 
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Color(0xFFE9E9E9),
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
+        backgroundColor: Color(0xFFE0AD61),
         elevation: 0.0,
-        title: Text('Sign up'),
+        title: Text('Sign up',style: TextStyle(color:Color(0XFF200087),fontSize: 20)),
         actions: <Widget>[
           FlatButton.icon(
-            icon: Icon(Icons.person),
-            label: Text('Sign In'),
+            icon: Icon(Icons.person,color: Color(0XFF200087),),
+            label: Text('Sign In',style: TextStyle(color:Color(0XFF200087),fontSize: 20)),
             onPressed: () => widget.toggleView(),
           ),
         ],
@@ -51,6 +48,11 @@ class _RegisterState extends State<Register> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              Hero(tag: 'logo',
+                child: Container(
+                  child: Image.asset('assets/logo.png'),
+                ),
+              ),
               SizedBox(height: 10.0),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'email'),
@@ -68,57 +70,11 @@ class _RegisterState extends State<Register> {
                   setState(() => password = val);
                 },
               ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'name'),
-                validator: (val) => val.isEmpty ? 'Enter a name' : null,
-                onChanged: (val) {
-                  setState(() => name = val);
-                },
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'surname'),
-                validator: (val) => val.isEmpty ? 'Enter a surname' : null,
-                onChanged: (val) {
-                  setState(() => surname = val);
-                },
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'age'),
-                validator: (val) => val.isEmpty ? 'Enter an age' : null,
-                onChanged: (val) {
-                  setState(() => age = val);
-                },
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'gender'),
-                validator: (val) => val.isEmpty ? 'Enter a gender' : null,
-                onChanged: (val) {
-                  setState(() => gender = val);
-                },
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'weight'),
-                validator: (val) => val.isEmpty ? 'Enter a weight' : null,
-                onChanged: (val) {
-                  setState(() => weight = val);
-                },
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'height'),
-                validator: (val) => val.isEmpty ? 'Enter a height' : null,
-                onChanged: (val) {
-                  setState(() => height = val);
-                },
-              ),
-              
+
+              SizedBox(height: 10.0,),
+
               RaisedButton(
-                color: Colors.pink[400],
+                color: Color(0XFF200087),
                 child: Text(
                   'Register',
                   style: TextStyle(color: Colors.white),
@@ -126,12 +82,17 @@ class _RegisterState extends State<Register> {
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
                     setState(() => loading = true);
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password,name,surname,age,gender,weight,height); 
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                    
                     if(result == null) {
                       setState(() {
                         loading = false;
                         error = 'Please supply a valid email';
                       });
+                    }else{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CalorieCalculatorScreen()),);
                     }
                   }
                 }

@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:healtish_app/ui/pages/profile_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:healtish_app/services/database.dart';
+import 'package:healtish_app/services/auth.dart';
 
 class CalorieCalculatorScreen extends StatefulWidget {
   @override
@@ -16,6 +20,9 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
   bool gender = false;
   double height = 170.0;
   Map mapActivite = {0: "rare", 1: "sometimes", 2: "frequently"};
+
+  final DatabaseService databaseService = DatabaseService();
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -176,6 +183,7 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
   }
 
   void calculateNeededCalories() {
+    
     if (age != null && weight != null && radioSelected != null) {
       if (gender) {
         calorieBase =
@@ -200,6 +208,9 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
           calorieActivity = calorieBase;
           break;
       }
+
+      databaseService.addUserCalorieInfo(age.toInt(), weight.toInt(), height.toInt(), gender, _auth.getCurrentUser(),calorieActivity);
+      databaseService.updateUserIsNewData(_auth.getCurrentUser(),false);
 
       setState(() {
         dialogue();
@@ -246,7 +257,10 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
                   color: Colors.black38),
               SizedBox(height: 14),
               RaisedButton(
-                onPressed: () {
+                onPressed: () async {
+                  Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
+                  var pref = await _prefs;
+                  pref.setDouble('calorie', double.parse('$calorieBase'));
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ProfileScreen(calorie: double.parse('$calorieBase'),)),
