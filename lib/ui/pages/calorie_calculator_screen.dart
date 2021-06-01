@@ -23,7 +23,6 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
 
   final DatabaseService databaseService = DatabaseService();
   final AuthService _auth = AuthService();
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -209,8 +208,10 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
           break;
       }
 
-      databaseService.addUserCalorieInfo(age.toInt(), weight.toInt(), height.toInt(), gender, _auth.getCurrentUser(),calorieActivity);
+      var now = new DateTime.now();
+      databaseService.addUserCalorieInfo(age.toInt(), weight.toInt(), height.toInt(), gender, _auth.getCurrentUser(),calorieActivity,radioSelected,now);
       databaseService.updateUserIsNewData(_auth.getCurrentUser(),false);
+      
 
       setState(() {
         dialogue();

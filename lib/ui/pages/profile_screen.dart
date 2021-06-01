@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:healtish_app/model/motivation.dart';
+import 'package:healtish_app/ui/pages/analysis_screen.dart';
 import 'package:healtish_app/ui/pages/onboarding_screen.dart';
 import 'package:healtish_app/ui/pages/recipeHome_screen.dart';
 import 'package:vector_math/vector_math_64.dart' as math;
@@ -78,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ))
                         ]),
                       ),
-                    ),
+                    ),SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -240,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       );
     }
-    List<Widget> pages = [getProfile(),CalorieCalculatorScreen()];
+    List<Widget> pages = [getProfile(),CalorieCalculatorScreen(),AnalysisScreen()];
     return Scaffold(
         backgroundColor: const Color(0xFFE9E9E9),
         bottomNavigationBar: ClipRRect(
@@ -271,6 +272,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 title: Text(
                   "Settings",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),BottomNavigationBarItem(
+                icon: Padding(
+                  child: Icon(Icons.bar_chart),
+                  padding: EdgeInsets.only(top: 8.0),
+                ),
+                title: Text(
+                  "Analysis",
                   style: TextStyle(color: Colors.white),
                 ),
               ),

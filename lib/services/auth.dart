@@ -21,7 +21,7 @@ class AuthService{
   }
 
   String getCurrentUser(){
-    return _auth.currentUser.email;
+    return _auth.currentUser.email ;
   }
 
   // sign in anon

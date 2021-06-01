@@ -2,6 +2,8 @@ import 'package:healtish_app/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healtish_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:starfruit/starfruit.dart';
+
 
 
 
@@ -14,33 +16,62 @@ class DatabaseService {
   final CollectionReference users = FirebaseFirestore.instance.collection('users');
   final CollectionReference calories = FirebaseFirestore.instance.collection('calories');
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // var document = FirebaseFirestore.instance.collection('calories');
-  
-  Future<void> addUserCalorieInfo(int age,int weight,int height,bool gender,String email, int calorie) async {
+
+  Future<void> addUserCalorieInfo(int age,int weight,int height,bool gender,String email, int calorie, int frequencySport, DateTime registerDate) async {
       return calories.add({
         'age':age,
         'weight':weight,
         'height':height,
         'gender':gender,
         'email':email,
-        'calorie':calorie
+        'calorie':calorie,
+        'frequencySport':frequencySport,
+        'registerDate': registerDate
       })
       .then((value)=> print("User Calorie Information Added"))
       .catchError((error)=> print("Failed to add Calorie Info : $error"));
   }
-
-  Future<String> checkhUserCalorieDataExits(String email)async{
-
-  // calories.snapshots().listen((data){
-  //     data.docs.forEach((doc){
-  //       if(email==doc['email']){
-  //         return true;
-  //       }});
-  //       return false;
-  //    });
-  //   print("checkhUserCalorieDataExits-$result");
-  //   return result.toString();
+//Kullanıcnın kilo verisini liste olarak verir parametre olarak _auth.getCurrentUser() verilmeli
+  Future<List<double>> getCurrentUserWeightData(String email) async{
+    List<double> weightList = new List();
+      await calories.get().then((QuerySnapshot snapshot) {
+        snapshot.docs.forEach((DocumentSnapshot doc) {
+          if(email==doc['email'].toString()){
+            weightList.add(doc['weight'].toDouble());
+          }
+         });
+      });
+      return weightList;
   }
+//Kullanıcnın spor verisini liste olarak verir parametre olarak _auth.getCurrentUser() verilmeli
+  Future<List<double>> getCurrentUserSportData(String email) async{
+    List<double> sportFrequencyList = new List();
+      await calories.get().then((QuerySnapshot snapshot) {
+        snapshot.docs.forEach((DocumentSnapshot doc) {
+          if(email==doc['email'].toString()){
+            sportFrequencyList.add(doc['frequencySport'].toDouble());
+          }
+         });
+      });
+      return sportFrequencyList;
+  }
+  //Kullanıcnın kilo ve spor verisine göre correlation datasını verir parametre olarak _auth.getCurrentUser() verilmeli
+    Future<double> getCorrelationCoefficient(String email)async{
+    List<double> weightList=new List();
+    List<double> sportFrequencyList = new List();
+
+    await getCurrentUserWeightData(email).then((value) =>{weightList=value});
+    await getCurrentUserSportData(email).then((value) =>{sportFrequencyList=value});
+
+    Map<double,double> stats={
+
+    };
+    for (var i = 0; i < weightList.length; i++) {
+      stats.putIfAbsent(weightList[i], () => sportFrequencyList[i]);
+    }
+    return stats.corCoefficient;
+  }
+
 
   Future<void> updateUserData(String email, bool isNew) async {
     return  users.add({
@@ -61,17 +92,6 @@ class DatabaseService {
 
   }
 
-  // // brew list from snapshot
-  // List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
-  //   return snapshot.documents.map((doc){
-  //     //print(doc.data);
-  //     return Brew(
-  //       name: doc.data['name'] ?? '',
-  //       strength: doc.data['strength'] ?? 0,
-  //       sugars: doc.data['sugars'] ?? '0'
-  //     );
-  //   }).toList();
-  // }
 
   // user data from snapshots
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
@@ -84,12 +104,6 @@ class DatabaseService {
 
     );
   }
-
-  // get brews stream
-  // Stream<List<Brew>> get brews {
-  //   return users.snapshots()
-  //     .map(_brewListFromSnapshot);
-  // }
 
   // get user doc stream
   Stream<UserData> get userData {
