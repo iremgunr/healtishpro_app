@@ -6,6 +6,7 @@ import 'package:healtish_app/ui/pages/calorie_calculator_screen.dart';
 import 'package:healtish_app/ui/pages/profile_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -65,7 +66,7 @@ class _SignInState extends State<SignIn> {
                           'assets/logo.png',
                         )),
                       ),
-                      Divider(color: const Color(0xFFE3B3D2)),
+                      Divider(color: const Color(0xFFE0AD61)),
                       TextFormField(
                         decoration: textInputDecoration.copyWith(
                             hintText: 'Please Enter Email'),
@@ -116,6 +117,23 @@ class _SignInState extends State<SignIn> {
                               }
                             }
                           }),
+                      SizedBox(height: 8,),
+                      Row(
+                       mainAxisAlignment: MainAxisAlignment.center,
+
+                        children: <Widget>[
+                          InkWell(
+                              child: Text(
+                                  "For more info click here to go our website!",style: TextStyle(color: Color(0xFFE0AD61),fontWeight: FontWeight.bold),),
+                              onTap: () async {
+                                if (await canLaunch(
+                                    "http://healtishpro.byethost7.com/website/HealtishPro/gui/index.php")) {
+                                  await launch(
+                                      "http://healtishpro.byethost7.com/website/HealtishPro/gui/index.php");
+                                }
+                              })
+                        ],
+                      ),
                       SizedBox(height: 12.0),
                       Text(
                         error,

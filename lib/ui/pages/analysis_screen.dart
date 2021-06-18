@@ -102,8 +102,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                           ..setAttribute(charts.rendererIdKey, 'customLine'),
                       ];
                       return Container(
-                        margin: const EdgeInsets.all(15.0),
-                        padding: const EdgeInsets.all(10.0),
+                        margin: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(15.0),
                         decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10)), //here
@@ -111,7 +111,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                             boxShadow: [
                               BoxShadow(
                                   color: Colors.grey,
-                                  offset: Offset(-5, 0),
+                                 // offset: Offset(-5, 0),
                                   blurRadius: 20.0)
                             ]),
                         child: Stack(

@@ -31,11 +31,6 @@ dependencies:
   provider: ^4.1.1
   animations: ^1.0.0
   draw_graph: ^0.0.2
-
-
-
-
-
   font_awesome_flutter: ^8.4.0
   decimal: ^0.3.3
   percent_indicator: ^1.0.14
@@ -53,6 +48,7 @@ dependencies:
   intl: ^0.16.1
   starfruit: ^1.0.0+1
   charts_flutter: ^0.10.0
+
 
 
 
