@@ -1,6 +1,6 @@
 # healtish_app
 
-HALA ÜZERİNDE ÇALIŞIYORUZ, TAMAMLANMADI!! - WE ARE STILL WORKING ON IT, NOT COMPLEATED YET!!!
+Completed.
 
 ## Getting Started
 
